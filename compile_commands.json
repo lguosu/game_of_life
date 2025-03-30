@@ -1,0 +1,17 @@
+[
+  {
+    "directory": "/home/larry/scratch/gpu-programming/game_of_life",
+    "command": "g++ -std=c++17 -Wall -Wextra -pedantic -O3 -c src/game_of_life.cpp -o build/game_of_life.o",
+    "file": "src/game_of_life.cpp"
+  },
+  {
+    "directory": "/home/larry/scratch/gpu-programming/game_of_life",
+    "command": "g++ -std=c++17 -Wall -Wextra -pedantic -O3 -c src/main.cpp -o build/main.o",
+    "file": "src/main.cpp"
+  },
+  {
+    "directory": "/home/larry/scratch/gpu-programming/game_of_life",
+    "command": "g++ -std=c++17 -Wall -Wextra -pedantic -O3 -I/usr/src/googletest/googletest/include -c test/game_of_life_test.cpp -o build/game_of_life_test.o",
+    "file": "test/game_of_life_test.cpp"
+  }
+] 
