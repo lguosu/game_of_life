@@ -1,0 +1,36 @@
+---
+Checks: >
+  bugprone-*,
+  clang-analyzer-*,
+  clang-diagnostic-*,
+  google-*,
+  misc-*,
+  modernize-*,
+  performance-*,
+  portability-*,
+  readability-*,
+  -bugprone-easily-swappable-parameters,
+  -misc-header-include-cycle,
+  -modernize-use-trailing-return-type,
+  -readability-magic-numbers,
+  -readability-identifier-length
+WarningsAsErrors: "clang-diagnostic-*"
+HeaderFilterRegex: ".*"
+FormatStyle: file
+InheritParentConfig: true
+CheckOptions:
+  - key: readability-identifier-naming.ClassCase
+    value: CamelCase
+  - key: readability-identifier-naming.PrivateMemberPrefix
+    value: ''
+  - key: readability-identifier-naming.PrivateMemberSuffix
+    value: '_'
+  - key: readability-identifier-naming.EnumConstantCase
+    value: UPPER_CASE
+  - key: readability-identifier-naming.ConstexprVariableCase
+    value: UPPER_CASE
+  - key: readability-identifier-naming.GlobalConstantCase
+    value: UPPER_CASE
+  - key: google-readability-braces-around-statements.ShortStatementLines
+    value: '1'
+---
