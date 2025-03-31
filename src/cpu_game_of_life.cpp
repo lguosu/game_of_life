@@ -1,33 +1,9 @@
 #include "cpu_game_of_life.hpp"
 
 #include <iostream>
-#include <random>
 
 CPUGameOfLife::CPUGameOfLife(int width, int height)
-    : GameOfLife(width, height), grid_(width * height, false) {}
-
-void CPUGameOfLife::Randomize(double alive_probability) {
-  std::random_device rd;
-  std::mt19937 gen(rd());
-  std::uniform_real_distribution<> dis(0.0, 1.0);
-
-  for (int i = 0; i < width_ * height_; ++i) {
-    grid_[i] = dis(gen) < alive_probability;
-  }
-}
-
-void CPUGameOfLife::SetCellState(int x, int y, bool alive) {
-  if (x >= 0 && x < width_ && y >= 0 && y < height_) {
-    grid_[GetIndex(x, y)] = alive;
-  }
-}
-
-bool CPUGameOfLife::GetCellState(int x, int y) const {
-  if (x >= 0 && x < width_ && y >= 0 && y < height_) {
-    return grid_[GetIndex(x, y)];
-  }
-  return false;  // Out of bounds cells are considered dead
-}
+    : GameOfLife(width, height) {}
 
 void CPUGameOfLife::NextGeneration() {
   std::vector<bool> new_grid(width_ * height_);
@@ -53,15 +29,6 @@ void CPUGameOfLife::NextGeneration() {
   }
 
   grid_ = std::move(new_grid);
-}
-
-void CPUGameOfLife::Print(char alive_char, char dead_char) const {
-  for (int y = 0; y < height_; ++y) {
-    for (int x = 0; x < width_; ++x) {
-      std::cout << (GetCellState(x, y) ? alive_char : dead_char);
-    }
-    std::cout << std::endl;
-  }
 }
 
 int CPUGameOfLife::CountLiveNeighbors(int x, int y) const {

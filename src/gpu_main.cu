@@ -4,14 +4,7 @@
 #include <thread>
 
 #include "gpu_game_of_life.cuh"
-
-void ClearScreen() {
-#ifdef _WIN32
-  std::system("cls");
-#else
-  std::system("clear");
-#endif
-}
+#include "utils.hpp"
 
 int main(int argc, char* argv[]) {
   // Default values
@@ -45,6 +38,9 @@ int main(int argc, char* argv[]) {
     // Initialize with random state
     game.Randomize(initial_density);
 
+    // Explicitly copy the grid to the device
+    game.CopyToDevice();
+
     // Run the simulation for the specified number of generations
     for (int gen = 0; gen < generations; ++gen) {
       ClearScreen();
@@ -55,8 +51,7 @@ int main(int argc, char* argv[]) {
 
       // Measure performance for NextGeneration
       auto start_time = std::chrono::high_resolution_clock::now();
-      game.NextGeneration();  // Note: This is just a stub implementation for
-                              // now
+      game.NextGeneration();
       auto end_time = std::chrono::high_resolution_clock::now();
 
       auto duration = std::chrono::duration_cast<std::chrono::microseconds>(

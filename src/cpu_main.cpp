@@ -4,14 +4,7 @@
 #include <thread>
 
 #include "cpu_game_of_life.hpp"
-
-void ClearScreen() {
-#ifdef _WIN32
-  std::system("cls");
-#else
-  std::system("clear");
-#endif
-}
+#include "utils.hpp"
 
 int main(int argc, char* argv[]) {
   // Default values
