@@ -10,7 +10,9 @@ CUDA_LIBDIR = /usr/local/cuda/lib64
 CUDA_LIBS = -lcudart
 
 # Google Test flags
-GTEST_CFLAGS = -I/usr/src/googletest/googletest/include
+GTEST_PREFIX ?= /usr/src
+GTEST_CFLAGS = -I$(GTEST_PREFIX)/googletest/googletest/include
+GTEST_LIBDIR = $(GTEST_PREFIX)/gtest/lib
 GTEST_LIBS = -lgtest -lgtest_main -pthread
 
 SRC_DIR = src
@@ -81,7 +83,7 @@ $(GPU_TARGET): $(GPU_MAIN_OBJ) $(GPU_OBJ)
 
 # Link test program
 $(CPU_TEST_TARGET): $(CPU_TEST_OBJ) $(CPU_OBJ)
-	$(CXX) $(LDFLAGS) $^ $(GTEST_LIBS) -o $@
+	$(CXX) $(LDFLAGS) $^ -L$(GTEST_LIBDIR) $(GTEST_LIBS) -o $@
 
 # Link benchmark program
 $(BENCHMARK_TARGET): $(BENCHMARK_OBJ) $(CPU_OBJ) $(GPU_OBJ)
