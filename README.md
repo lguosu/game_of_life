@@ -1,6 +1,6 @@
-# Conway's Game of Life
+# Conway's Game of Life - CPU and GPU Implementations
 
-This is a C++17 implementation of Conway's Game of Life, a cellular automaton devised by the British mathematician John Conway in 1970. This implementation serves as a reference CPU version before proceeding with a CUDA GPU-accelerated version.
+This is a C++17 implementation of Conway's Game of Life, a cellular automaton devised by the British mathematician John Conway in 1970. The project includes both a CPU version and a CUDA GPU-accelerated version, allowing for performance comparison between the two approaches.
 
 ## Rules of the Game
 
@@ -15,17 +15,38 @@ The universe of the Game of Life is an infinite, two-dimensional orthogonal grid
 
 ```text
 .
-├── src/                 # Source code
-│   ├── game_of_life.hpp # Main class header
-│   ├── game_of_life.cpp # Main class implementation
-│   └── main.cpp         # Program entry point
-├── test/                # Test code
-│   └── game_of_life_test.cpp # Tests for GameOfLife class
-├── Makefile             # Build system
-└── README.md            # This file
+├── src/                    # Source code
+│   ├── game_of_life.hpp    # Abstract base class header
+│   ├── cpu_game_of_life.hpp # CPU implementation header
+│   ├── cpu_game_of_life.cpp # CPU implementation
+│   ├── gpu_game_of_life.cuh # GPU implementation header
+│   ├── gpu_game_of_life.cu  # GPU implementation with CUDA
+│   ├── cpu_main.cpp        # CPU version entry point
+│   ├── gpu_main.cu         # GPU version entry point
+│   └── utils.hpp           # Common utility functions
+├── test/                   # Test code
+│   └── cpu_game_of_life_test.cpp # Tests for CPU implementation
+├── Makefile                # Build system
+└── README.md               # This file
 ```
 
+## Architecture
+
+The project uses an object-oriented design with inheritance:
+
+- `GameOfLife`: Abstract base class that defines the common interface and default implementations
+- `CPUGameOfLife`: CPU implementation using standard C++ techniques
+- `GPUGameOfLife`: GPU implementation using CUDA for parallel processing
+
+Both implementations share common functionality through the base class, including cell state management and grid display, while the core simulation logic is optimized for each platform.
+
 ## Building the Project
+
+### Prerequisites
+
+- C++17 compatible compiler (e.g., GCC 7+, Clang 5+)
+- CUDA Toolkit (for GPU version, tested with CUDA 11.0+)
+- Google Test framework (for tests)
 
 To build the project, run:
 
@@ -33,20 +54,31 @@ To build the project, run:
 make
 ```
 
-This will create two executables:
+This will create three executables:
 
-- `game_of_life`: The main program
-- `game_of_life_test`: The test program
+- `cpu_game_of_life`: The CPU implementation
+- `gpu_game_of_life`: The GPU implementation with CUDA
+- `cpu_game_of_life_test`: The test program for CPU implementation
 
-## Running the Program
+## Running the Programs
 
-Run the main program with:
+### CPU Version
+
+Run the CPU version with:
 
 ```bash
-./game_of_life [width] [height] [generations] [initialDensity] [delay]
+./cpu_game_of_life [width] [height] [generations] [initialDensity] [delay]
 ```
 
-Parameters:
+### GPU Version
+
+Run the GPU version with:
+
+```bash
+./gpu_game_of_life [width] [height] [generations] [initialDensity] [delay]
+```
+
+### Parameters
 
 - `width`: Grid width (default: 40)
 - `height`: Grid height (default: 20)
@@ -65,21 +97,48 @@ make test
 or directly:
 
 ```bash
-./game_of_life_test
+./cpu_game_of_life_test
 ```
 
 ## Implementation Details
 
-The implementation uses a toroidal grid (wrapping around edges) for the simulation. The `GameOfLife` class provides methods to:
+### Common Features
 
-- Initialize the grid
-- Randomize the state
-- Set and get cell states
-- Compute the next generation
-- Display the grid
+- Toroidal grid (wrapping around edges) for both implementations
+- Random initialization with configurable density
+- Console visualization of the grid
 
-The game rules are implemented in the `nextGeneration()` method, which updates all cells simultaneously according to Conway's rules.
+### CPU Implementation
+
+The CPU implementation follows a straightforward approach:
+
+- Sequential processing of the grid
+- Double buffering to maintain current and next states
+- Direct memory access to cell states
+
+### GPU Implementation
+
+The GPU implementation leverages CUDA for massive parallelism:
+
+- Each cell's next state is computed by a separate CUDA thread
+- Thread blocks of 16x16 threads process grid sections
+- Device memory management for efficient data transfer
+- Performance measurement to highlight GPU acceleration benefits
+
+## Performance Comparison
+
+The GPU implementation includes performance timing that displays the microseconds required for each generation. On sufficiently large grids, the GPU version demonstrates significant speedup compared to the CPU version due to its parallel processing capabilities.
 
 ## Future Work
 
-This implementation will serve as a reference for a CUDA-accelerated version to explore the speedup potential of GPU parallel computing for this type of cellular automaton simulation.
+Potential improvements for this project:
+
+1. Multi-threaded CPU implementation for comparison
+2. Shared memory optimization in the CUDA kernel
+3. OpenGL visualization for real-time rendering
+4. More complex cellular automata rules and patterns
+5. Additional test cases for the GPU implementation
+
+## License
+
+[MIT License](LICENSE)
