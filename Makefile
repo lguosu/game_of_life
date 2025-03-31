@@ -23,6 +23,7 @@ GPU_SRC = $(SRC_DIR)/gpu_game_of_life.cu
 CPU_MAIN_SRC = $(SRC_DIR)/cpu_main.cpp
 GPU_MAIN_SRC = $(SRC_DIR)/gpu_main.cu
 CPU_TEST_SRC = $(TEST_DIR)/cpu_game_of_life_test.cpp
+BENCHMARK_SRC = $(SRC_DIR)/performance_benchmark.cpp
 
 # Object files
 CPU_MAIN_OBJ = $(BUILD_DIR)/cpu_main.o
@@ -30,15 +31,17 @@ CPU_OBJ = $(BUILD_DIR)/cpu_game_of_life.o
 GPU_OBJ = $(BUILD_DIR)/gpu_game_of_life.o
 GPU_MAIN_OBJ = $(BUILD_DIR)/gpu_main.o
 CPU_TEST_OBJ = $(BUILD_DIR)/cpu_game_of_life_test.o
+BENCHMARK_OBJ = $(BUILD_DIR)/performance_benchmark.o
 
 # Executables
 CPU_TARGET = cpu_game_of_life
 GPU_TARGET = gpu_game_of_life
 CPU_TEST_TARGET = cpu_game_of_life_test
+BENCHMARK_TARGET = performance_benchmark
 
-.PHONY: all clean test
+.PHONY: all clean test benchmark
 
-all: $(CPU_TARGET) $(GPU_TARGET) $(CPU_TEST_TARGET)
+all: $(CPU_TARGET) $(GPU_TARGET) $(CPU_TEST_TARGET) $(BENCHMARK_TARGET)
 
 # Create build directory if it doesn't exist
 $(BUILD_DIR):
@@ -64,6 +67,10 @@ $(GPU_MAIN_OBJ): $(GPU_MAIN_SRC) $(SRC_DIR)/gpu_game_of_life.cuh $(SRC_DIR)/util
 $(CPU_TEST_OBJ): $(CPU_TEST_SRC) $(SRC_DIR)/cpu_game_of_life.hpp | $(BUILD_DIR)
 	$(CXX) $(CXXFLAGS) $(GTEST_CFLAGS) -c $< -o $@
 
+# Compile benchmark program
+$(BENCHMARK_OBJ): $(BENCHMARK_SRC) $(SRC_DIR)/cpu_game_of_life.hpp $(SRC_DIR)/gpu_game_of_life.cuh | $(BUILD_DIR)
+	$(NVCC) $(NVCCFLAGS) -I$(CUDA_INCLUDE) -c $< -o $@
+
 # Link CPU main program
 $(CPU_TARGET): $(CPU_MAIN_OBJ) $(CPU_OBJ)
 	$(CXX) $(LDFLAGS) $^ -o $@
@@ -76,9 +83,16 @@ $(GPU_TARGET): $(GPU_MAIN_OBJ) $(GPU_OBJ)
 $(CPU_TEST_TARGET): $(CPU_TEST_OBJ) $(CPU_OBJ)
 	$(CXX) $(LDFLAGS) $^ $(GTEST_LIBS) -o $@
 
+# Link benchmark program
+$(BENCHMARK_TARGET): $(BENCHMARK_OBJ) $(CPU_OBJ) $(GPU_OBJ)
+	$(NVCC) $(LDFLAGS) $^ -L$(CUDA_LIBDIR) $(CUDA_LIBS) -o $@
+
 test: $(CPU_TEST_TARGET)
 	./$(CPU_TEST_TARGET)
 
+benchmark: $(BENCHMARK_TARGET)
+	./$(BENCHMARK_TARGET)
+
 # Clean up
 clean:
-	rm -rf $(BUILD_DIR) $(CPU_TARGET) $(GPU_TARGET) $(CPU_TEST_TARGET) 
+	rm -rf $(BUILD_DIR) $(CPU_TARGET) $(GPU_TARGET) $(CPU_TEST_TARGET) $(BENCHMARK_TARGET) 

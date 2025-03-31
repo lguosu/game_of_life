@@ -15,9 +15,10 @@ class GameOfLife {
   virtual ~GameOfLife() = default;
 
   // Initialize with random state (alive cells with the given probability)
-  virtual void Randomize(double alive_probability = 0.3) {
+  // Optional seed parameter for reproducible randomization
+  virtual void Randomize(double alive_probability = 0.3, unsigned seed = 0) {
     std::random_device rd;
-    std::mt19937 gen(rd());
+    std::mt19937 gen(seed != 0 ? seed : rd());
     std::uniform_real_distribution<> dis(0.0, 1.0);
 
     for (int i = 0; i < width_ * height_; ++i) {
