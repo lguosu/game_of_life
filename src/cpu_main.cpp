@@ -36,24 +36,23 @@ int main(int argc, char* argv[]) {
 
   // Initialize with random state
   game.Randomize(initial_density);
+  ClearScreen();
+  std::cout << "CPU Game of Life - Generation: 0" << std::endl;
+  game.Print();
 
   // Run the simulation for the specified number of generations
-  for (int gen = 0; gen < generations; ++gen) {
-    ClearScreen();
-    std::cout << "CPU Game of Life - Generation: " << gen << std::endl;
-    game.Print();
-
+  for (int gen = 1; gen <= generations; ++gen) {
     std::this_thread::sleep_for(std::chrono::milliseconds(delay));
-
     // Measure performance for NextGeneration
     auto start_time = std::chrono::high_resolution_clock::now();
     game.NextGeneration();
     auto end_time = std::chrono::high_resolution_clock::now();
-
     auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
                         end_time - start_time)
                         .count();
-
+    ClearScreen();
+    std::cout << "CPU Game of Life - Generation: " << gen << std::endl;
+    game.Print();
     std::cout << "Generation time: " << duration << " microseconds"
               << std::endl;
   }
