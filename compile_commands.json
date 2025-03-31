@@ -1,17 +1,84 @@
 [
   {
+    "arguments": [
+      "/usr/bin/g++",
+      "-std=c++17",
+      "-Wall",
+      "-Wextra",
+      "-pedantic",
+      "-O3",
+      "-c",
+      "-o",
+      "build/cpu_main.o",
+      "src/cpu_main.cpp"
+    ],
     "directory": "/home/larry/scratch/gpu-programming/game_of_life",
-    "command": "g++ -std=c++17 -Wall -Wextra -pedantic -O3 -c src/game_of_life.cpp -o build/game_of_life.o",
-    "file": "src/game_of_life.cpp"
+    "file": "/home/larry/scratch/gpu-programming/game_of_life/src/cpu_main.cpp",
+    "output": "/home/larry/scratch/gpu-programming/game_of_life/build/cpu_main.o"
   },
   {
+    "arguments": [
+      "/usr/bin/g++",
+      "-std=c++17",
+      "-Wall",
+      "-Wextra",
+      "-pedantic",
+      "-O3",
+      "-c",
+      "-o",
+      "build/cpu_game_of_life.o",
+      "src/cpu_game_of_life.cpp"
+    ],
     "directory": "/home/larry/scratch/gpu-programming/game_of_life",
-    "command": "g++ -std=c++17 -Wall -Wextra -pedantic -O3 -c src/main.cpp -o build/main.o",
-    "file": "src/main.cpp"
+    "file": "/home/larry/scratch/gpu-programming/game_of_life/src/cpu_game_of_life.cpp",
+    "output": "/home/larry/scratch/gpu-programming/game_of_life/build/cpu_game_of_life.o"
   },
   {
+    "arguments": [
+      "/usr/local/cuda/bin/nvcc",
+      "-std=c++17",
+      "-O3",
+      "-I/usr/local/cuda/include",
+      "-c",
+      "-o",
+      "build/gpu_main.o",
+      "src/gpu_main.cu"
+    ],
     "directory": "/home/larry/scratch/gpu-programming/game_of_life",
-    "command": "g++ -std=c++17 -Wall -Wextra -pedantic -O3 -I/usr/src/googletest/googletest/include -c test/game_of_life_test.cpp -o build/game_of_life_test.o",
-    "file": "test/game_of_life_test.cpp"
+    "file": "/home/larry/scratch/gpu-programming/game_of_life/src/gpu_main.cu",
+    "output": "/home/larry/scratch/gpu-programming/game_of_life/build/gpu_main.o"
+  },
+  {
+    "arguments": [
+      "/usr/local/cuda/bin/nvcc",
+      "-std=c++17",
+      "-O3",
+      "-I/usr/local/cuda/include",
+      "-c",
+      "-o",
+      "build/gpu_game_of_life.o",
+      "src/gpu_game_of_life.cu"
+    ],
+    "directory": "/home/larry/scratch/gpu-programming/game_of_life",
+    "file": "/home/larry/scratch/gpu-programming/game_of_life/src/gpu_game_of_life.cu",
+    "output": "/home/larry/scratch/gpu-programming/game_of_life/build/gpu_game_of_life.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-std=c++17",
+      "-Wall",
+      "-Wextra",
+      "-pedantic",
+      "-O3",
+      "-I/usr/src/googletest/googletest/include",
+      "-c",
+      "-o",
+      "build/cpu_game_of_life_test.o",
+      "test/cpu_game_of_life_test.cpp"
+    ],
+    "directory": "/home/larry/scratch/gpu-programming/game_of_life",
+    "file": "/home/larry/scratch/gpu-programming/game_of_life/test/cpu_game_of_life_test.cpp",
+    "output": "/home/larry/scratch/gpu-programming/game_of_life/build/cpu_game_of_life_test.o"
   }
-] 
+]

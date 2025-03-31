@@ -1,6 +1,13 @@
 CXX = g++
+NVCC = nvcc
 CXXFLAGS = -std=c++17 -Wall -Wextra -pedantic -O3
+NVCCFLAGS = -std=c++17 -O3
 LDFLAGS = 
+
+# CUDA paths - adjust these for your system
+CUDA_INCLUDE = /usr/local/cuda/include
+CUDA_LIBDIR = /usr/local/cuda/lib64
+CUDA_LIBS = -lcudart
 
 # Google Test flags
 GTEST_CFLAGS = -I/usr/src/googletest/googletest/include
@@ -11,50 +18,67 @@ TEST_DIR = test
 BUILD_DIR = build
 
 # Source files
-SRC_FILES = $(SRC_DIR)/game_of_life.cpp
-MAIN_SRC = $(SRC_DIR)/main.cpp
-TEST_SRC = $(TEST_DIR)/game_of_life_test.cpp
+CPU_SRC = $(SRC_DIR)/cpu_game_of_life.cpp
+GPU_SRC = $(SRC_DIR)/gpu_game_of_life.cu
+CPU_MAIN_SRC = $(SRC_DIR)/cpu_main.cpp
+GPU_MAIN_SRC = $(SRC_DIR)/gpu_main.cu
+CPU_TEST_SRC = $(TEST_DIR)/cpu_game_of_life_test.cpp
 
 # Object files
-MAIN_OBJ = $(BUILD_DIR)/main.o
-GAME_OBJ = $(BUILD_DIR)/game_of_life.o
-TEST_OBJ = $(BUILD_DIR)/game_of_life_test.o
+CPU_MAIN_OBJ = $(BUILD_DIR)/cpu_main.o
+CPU_OBJ = $(BUILD_DIR)/cpu_game_of_life.o
+GPU_OBJ = $(BUILD_DIR)/gpu_game_of_life.o
+GPU_MAIN_OBJ = $(BUILD_DIR)/gpu_main.o
+CPU_TEST_OBJ = $(BUILD_DIR)/cpu_game_of_life_test.o
 
 # Executables
-MAIN_TARGET = game_of_life
-TEST_TARGET = game_of_life_test
+CPU_TARGET = cpu_game_of_life
+GPU_TARGET = gpu_game_of_life
+CPU_TEST_TARGET = cpu_game_of_life_test
 
 .PHONY: all clean test
 
-all: $(MAIN_TARGET) $(TEST_TARGET)
+all: $(CPU_TARGET) $(GPU_TARGET) $(CPU_TEST_TARGET)
 
 # Create build directory if it doesn't exist
 $(BUILD_DIR):
 	mkdir -p $(BUILD_DIR)
 
-# Compile game of life library
-$(GAME_OBJ): $(SRC_DIR)/game_of_life.cpp $(SRC_DIR)/game_of_life.hpp | $(BUILD_DIR)
+# Compile CPU game of life library
+$(CPU_OBJ): $(CPU_SRC) $(SRC_DIR)/cpu_game_of_life.hpp $(SRC_DIR)/game_of_life.hpp | $(BUILD_DIR)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-# Compile main program
-$(MAIN_OBJ): $(MAIN_SRC) $(SRC_DIR)/game_of_life.hpp | $(BUILD_DIR)
+# Compile GPU game of life library
+$(GPU_OBJ): $(GPU_SRC) $(SRC_DIR)/gpu_game_of_life.cuh $(SRC_DIR)/game_of_life.hpp | $(BUILD_DIR)
+	$(NVCC) $(NVCCFLAGS) -I$(CUDA_INCLUDE) -c $< -o $@
+
+# Compile CPU main program
+$(CPU_MAIN_OBJ): $(CPU_MAIN_SRC) $(SRC_DIR)/cpu_game_of_life.hpp | $(BUILD_DIR)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+# Compile GPU main program
+$(GPU_MAIN_OBJ): $(GPU_MAIN_SRC) $(SRC_DIR)/gpu_game_of_life.cuh | $(BUILD_DIR)
+	$(NVCC) $(NVCCFLAGS) -I$(CUDA_INCLUDE) -c $< -o $@
 
 # Compile test program
-$(TEST_OBJ): $(TEST_SRC) $(SRC_DIR)/game_of_life.hpp | $(BUILD_DIR)
+$(CPU_TEST_OBJ): $(CPU_TEST_SRC) $(SRC_DIR)/cpu_game_of_life.hpp | $(BUILD_DIR)
 	$(CXX) $(CXXFLAGS) $(GTEST_CFLAGS) -c $< -o $@
 
-# Link main program
-$(MAIN_TARGET): $(MAIN_OBJ) $(GAME_OBJ)
+# Link CPU main program
+$(CPU_TARGET): $(CPU_MAIN_OBJ) $(CPU_OBJ)
 	$(CXX) $(LDFLAGS) $^ -o $@
 
+# Link GPU main program
+$(GPU_TARGET): $(GPU_MAIN_OBJ) $(GPU_OBJ)
+	$(NVCC) $(LDFLAGS) $^ -L$(CUDA_LIBDIR) $(CUDA_LIBS) -o $@
+
 # Link test program
-$(TEST_TARGET): $(TEST_OBJ) $(GAME_OBJ)
+$(CPU_TEST_TARGET): $(CPU_TEST_OBJ) $(CPU_OBJ)
 	$(CXX) $(LDFLAGS) $^ $(GTEST_LIBS) -o $@
 
-test: $(TEST_TARGET)
-	./$(TEST_TARGET)
+test: $(CPU_TEST_TARGET)
+	./$(CPU_TEST_TARGET)
 
 # Clean up
 clean:
-	rm -rf $(BUILD_DIR) $(MAIN_TARGET) $(TEST_TARGET) 
+	rm -rf $(BUILD_DIR) $(CPU_TARGET) $(GPU_TARGET) $(CPU_TEST_TARGET) 
