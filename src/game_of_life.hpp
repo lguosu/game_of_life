@@ -45,7 +45,7 @@ class GameOfLife {
   virtual void NextGeneration() = 0;
 
   // Print the current state of the grid to the console
-  virtual void Print(char alive_char = 'O', char dead_char = '.') const {
+  virtual void Print(char alive_char = 'X', char dead_char = ' ') const {
     for (int y = 0; y < height_; ++y) {
       for (int x = 0; x < width_; ++x) {
         std::cout << (GetCellState(x, y) ? alive_char : dead_char);
