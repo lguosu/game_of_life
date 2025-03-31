@@ -44,7 +44,18 @@ int main(int argc, char* argv[]) {
     game.Print();
 
     std::this_thread::sleep_for(std::chrono::milliseconds(delay));
+
+    // Measure performance for NextGeneration
+    auto start_time = std::chrono::high_resolution_clock::now();
     game.NextGeneration();
+    auto end_time = std::chrono::high_resolution_clock::now();
+
+    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(
+                        end_time - start_time)
+                        .count();
+
+    std::cout << "Generation time: " << duration << " microseconds"
+              << std::endl;
   }
 
   return 0;
