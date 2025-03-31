@@ -3,7 +3,7 @@
 #include <iostream>
 #include <thread>
 
-#include "game_of_life.hpp"
+#include "cpu_game_of_life.hpp"
 
 void ClearScreen() {
 #ifdef _WIN32
@@ -39,7 +39,7 @@ int main(int argc, char* argv[]) {
   }
 
   // Create the game with specified dimensions
-  GameOfLife game(width, height);
+  CPUGameOfLife game(width, height);
 
   // Initialize with random state
   game.Randomize(initial_density);
@@ -47,7 +47,7 @@ int main(int argc, char* argv[]) {
   // Run the simulation for the specified number of generations
   for (int gen = 0; gen < generations; ++gen) {
     ClearScreen();
-    std::cout << "Generation: " << gen << std::endl;
+    std::cout << "CPU Game of Life - Generation: " << gen << std::endl;
     game.Print();
 
     std::this_thread::sleep_for(std::chrono::milliseconds(delay));
