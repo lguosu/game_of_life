@@ -53,11 +53,11 @@ $(GPU_OBJ): $(GPU_SRC) $(SRC_DIR)/gpu_game_of_life.cuh $(SRC_DIR)/game_of_life.h
 	$(NVCC) $(NVCCFLAGS) -I$(CUDA_INCLUDE) -c $< -o $@
 
 # Compile CPU main program
-$(CPU_MAIN_OBJ): $(CPU_MAIN_SRC) $(SRC_DIR)/cpu_game_of_life.hpp | $(BUILD_DIR)
+$(CPU_MAIN_OBJ): $(CPU_MAIN_SRC) $(SRC_DIR)/cpu_game_of_life.hpp $(SRC_DIR)/utils.hpp | $(BUILD_DIR)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 # Compile GPU main program
-$(GPU_MAIN_OBJ): $(GPU_MAIN_SRC) $(SRC_DIR)/gpu_game_of_life.cuh | $(BUILD_DIR)
+$(GPU_MAIN_OBJ): $(GPU_MAIN_SRC) $(SRC_DIR)/gpu_game_of_life.cuh $(SRC_DIR)/utils.hpp | $(BUILD_DIR)
 	$(NVCC) $(NVCCFLAGS) -I$(CUDA_INCLUDE) -c $< -o $@
 
 # Compile test program
