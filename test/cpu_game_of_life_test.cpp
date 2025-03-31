@@ -1,10 +1,10 @@
-#include "../src/game_of_life.hpp"
+#include "../src/cpu_game_of_life.hpp"
 
 #include <gtest/gtest.h>
 
 // Test basic grid initialization
-TEST(GameOfLifeTest, Initialization) {
-  GameOfLife game(10, 10);
+TEST(CPUGameOfLifeTest, Initialization) {
+  CPUGameOfLife game(10, 10);
 
   // Check that the grid is initially empty
   for (int y = 0; y < game.height(); ++y) {
@@ -25,10 +25,10 @@ TEST(GameOfLifeTest, Initialization) {
 }
 
 // Test the rules of Game of Life
-TEST(GameOfLifeTest, Rules) {
+TEST(CPUGameOfLifeTest, Rules) {
   // Test underpopulation (fewer than 2 neighbors)
   {
-    GameOfLife game(3, 3);
+    CPUGameOfLife game(3, 3);
     game.SetCellState(1, 1, true);
     game.NextGeneration();
     EXPECT_FALSE(game.GetCellState(1, 1));  // Should die from underpopulation
@@ -36,7 +36,7 @@ TEST(GameOfLifeTest, Rules) {
 
   // Test survival (2 or 3 neighbors)
   {
-    GameOfLife game(3, 3);
+    CPUGameOfLife game(3, 3);
     game.SetCellState(0, 0, true);
     game.SetCellState(0, 1, true);
     game.SetCellState(1, 1, true);
@@ -46,7 +46,7 @@ TEST(GameOfLifeTest, Rules) {
 
   // Test overpopulation (more than 3 neighbors)
   {
-    GameOfLife game(3, 3);
+    CPUGameOfLife game(3, 3);
     game.SetCellState(0, 0, true);
     game.SetCellState(0, 1, true);
     game.SetCellState(0, 2, true);
@@ -58,7 +58,7 @@ TEST(GameOfLifeTest, Rules) {
 
   // Test reproduction (exactly 3 neighbors)
   {
-    GameOfLife game(3, 3);
+    CPUGameOfLife game(3, 3);
     game.SetCellState(0, 0, true);
     game.SetCellState(0, 1, true);
     game.SetCellState(0, 2, true);
@@ -69,10 +69,10 @@ TEST(GameOfLifeTest, Rules) {
 }
 
 // Test specific patterns
-TEST(GameOfLifeTest, Patterns) {
+TEST(CPUGameOfLifeTest, Patterns) {
   // Test still life: Block
   {
-    GameOfLife game(4, 4);
+    CPUGameOfLife game(4, 4);
     // Create a block pattern
     //  . . . .
     //  . O O .
@@ -94,7 +94,7 @@ TEST(GameOfLifeTest, Patterns) {
 
   // Test oscillator: Blinker
   {
-    GameOfLife game(5, 5);
+    CPUGameOfLife game(5, 5);
     // Create a blinker pattern (vertical)
     //  . . . . .
     //  . . O . .
