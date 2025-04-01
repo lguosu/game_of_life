@@ -35,7 +35,7 @@ void run_benchmarks() {
   std::cout << "\n";
 
   std::cout << std::setw(10) << "Grid Size" << std::setw(15) << "CPU (μs/gen)"
-            << std::setw(15) << "GPU (μs/gen)" << std::setw(15) << "Speedup (×)"
+            << std::setw(15) << "GPU (μs/gen)" << std::setw(15) << "Speedup (x)"
             << "\n";
   std::cout << std::string(55, '-') << "\n";
 
