@@ -73,7 +73,7 @@ GPUGameOfLife::~GPUGameOfLife() { ReleaseCudaMemory(); }
 void GPUGameOfLife::NextGeneration() {
   // Launch the CUDA kernel to calculate the next generation
   gameOfLifeKernel<<<grid_dim_, block_dim_>>>(d_current_grid_, d_next_grid_,
-                                              width_, height_);
+                                              width(), height());
 
   // Check for kernel launch errors
   CheckCudaError(cudaGetLastError(), "Failed to launch Game of Life kernel");
@@ -102,7 +102,7 @@ void GPUGameOfLife::CheckCudaError(cudaError_t error, const char* message) {
 // Initialize CUDA memory
 void GPUGameOfLife::InitializeCudaMemory() {
   // Allocate device memory for current and next grids
-  size_t size = width_ * height_ * sizeof(unsigned char);
+  size_t size = width() * height() * sizeof(unsigned char);
 
   CheckCudaError(cudaMalloc(&d_current_grid_, size),
                  "Failed to allocate device memory for current grid");
@@ -134,13 +134,13 @@ void GPUGameOfLife::ReleaseCudaMemory() {
 // Copy host to device
 void GPUGameOfLife::CopyToDevice() {
   // Convert std::vector<bool> to unsigned char array for CUDA
-  std::vector<unsigned char> temp_grid(width_ * height_);
-  for (int i = 0; i < width_ * height_; ++i) {
-    temp_grid[i] = grid_[i] ? 1 : 0;
+  std::vector<unsigned char> temp_grid(width() * height());
+  for (int i = 0; i < width() * height(); ++i) {
+    temp_grid[i] = grid()[i] ? 1 : 0;
   }
 
   // Copy to device
-  size_t size = width_ * height_ * sizeof(unsigned char);
+  size_t size = width() * height() * sizeof(unsigned char);
   CheckCudaError(cudaMemcpy(d_current_grid_, temp_grid.data(), size,
                             cudaMemcpyHostToDevice),
                  "Failed to copy grid from host to device");
@@ -149,16 +149,16 @@ void GPUGameOfLife::CopyToDevice() {
 // Copy device to host
 void GPUGameOfLife::CopyToHost() {
   // Create a temporary buffer for device data
-  std::vector<unsigned char> temp_grid(width_ * height_);
+  std::vector<unsigned char> temp_grid(width() * height());
 
   // Copy from device to temp buffer
-  size_t size = width_ * height_ * sizeof(unsigned char);
+  size_t size = width() * height() * sizeof(unsigned char);
   CheckCudaError(cudaMemcpy(temp_grid.data(), d_current_grid_, size,
                             cudaMemcpyDeviceToHost),
                  "Failed to copy grid from device to host");
 
   // Convert unsigned char to bool for grid_
-  for (int i = 0; i < width_ * height_; ++i) {
-    grid_[i] = temp_grid[i] != 0;
+  for (int i = 0; i < width() * height(); ++i) {
+    grid()[i] = temp_grid[i] != 0;
   }
 }
