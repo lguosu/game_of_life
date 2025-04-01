@@ -10,7 +10,7 @@
 class GPUGameOfLife : public GameOfLife {
  public:
   // Constructor that initializes a grid with given dimensions
-  GPUGameOfLife(int width, int height);
+  GPUGameOfLife(size_t width, size_t height);
 
   // Destructor to release CUDA resources
   ~GPUGameOfLife() override;

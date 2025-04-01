@@ -1,17 +1,21 @@
 #include "cpu_game_of_life.hpp"
 
-#include <iostream>
+#include <cstddef>
+#include <utility>
+#include <vector>
 
-CPUGameOfLife::CPUGameOfLife(int width, int height)
+#include "game_of_life.hpp"
+
+CPUGameOfLife::CPUGameOfLife(size_t width, size_t height)
     : GameOfLife(width, height) {}
 
 void CPUGameOfLife::NextGeneration() {
   std::vector<bool> new_grid(width_ * height_);
 
-  for (int y = 0; y < height_; ++y) {
-    for (int x = 0; x < width_; ++x) {
-      int live_neighbors = CountLiveNeighbors(x, y);
-      bool current_state = GetCellState(x, y);
+  for (size_t y = 0; y < height_; ++y) {
+    for (size_t x = 0; x < width_; ++x) {
+      const size_t live_neighbors = CountLiveNeighbors(x, y);
+      const bool current_state = GetCellState(x, y);
 
       // Apply Conway's Game of Life rules
       if (current_state) {
@@ -31,8 +35,8 @@ void CPUGameOfLife::NextGeneration() {
   grid_ = std::move(new_grid);
 }
 
-int CPUGameOfLife::CountLiveNeighbors(int x, int y) const {
-  int count = 0;
+size_t CPUGameOfLife::CountLiveNeighbors(size_t x, size_t y) const {
+  size_t count = 0;
 
   // Check all 8 neighbors
   for (int dy = -1; dy <= 1; ++dy) {
@@ -43,8 +47,8 @@ int CPUGameOfLife::CountLiveNeighbors(int x, int y) const {
       }
 
       // Wrap around the edges (toroidal grid)
-      int nx = (x + dx + width_) % width_;
-      int ny = (y + dy + height_) % height_;
+      const size_t nx = (x + dx + width_) % width_;
+      const size_t ny = (y + dy + height_) % height_;
 
       if (GetCellState(nx, ny)) {
         count++;
@@ -54,5 +58,3 @@ int CPUGameOfLife::CountLiveNeighbors(int x, int y) const {
 
   return count;
 }
-
-int CPUGameOfLife::GetIndex(int x, int y) const { return y * width_ + x; }

@@ -1,4 +1,5 @@
 #include <chrono>
+#include <exception>
 #include <iomanip>
 #include <iostream>
 #include <vector>
@@ -6,6 +7,7 @@
 #include "cpu_game_of_life.hpp"
 #include "gpu_game_of_life.cuh"
 
+namespace {
 // Benchmark a single run
 template <typename GameType>
 double benchmark_single_run(GameType& game, int generations) {
@@ -27,9 +29,10 @@ double benchmark_single_run(GameType& game, int generations) {
 void run_benchmarks() {
   const int generations = 100;
   const double initial_density = 0.3;
-  const std::vector<int> grid_sizes = {32, 64, 128, 256, 512, 1024, 2048};
+  const std::vector<size_t> grid_sizes = {32, 64, 128, 256, 512, 1024, 2048};
 
-  std::cout << "======= Performance Benchmark: CPU vs GPU =======" << "\n";
+  std::cout << "======= Performance Benchmark: CPU vs GPU ======="
+            << "\n";
   std::cout << "Running " << generations << " generations for each test"
             << "\n";
   std::cout << "\n";
@@ -46,7 +49,7 @@ void run_benchmarks() {
       GPUGameOfLife gpu_game(size, size);
 
       // Initialize both games with the same random seed for fairness
-      unsigned seed = static_cast<unsigned>(
+      const unsigned seed = static_cast<unsigned>(
           std::chrono::system_clock::now().time_since_epoch().count());
       cpu_game.Randomize(initial_density, seed);
       gpu_game.Randomize(initial_density, seed);
@@ -55,13 +58,13 @@ void run_benchmarks() {
       gpu_game.CopyToDevice();
 
       // Benchmark CPU version
-      double cpu_time = benchmark_single_run(cpu_game, generations);
+      const double cpu_time = benchmark_single_run(cpu_game, generations);
 
       // Benchmark GPU version
-      double gpu_time = benchmark_single_run(gpu_game, generations);
+      const double gpu_time = benchmark_single_run(gpu_game, generations);
 
       // Calculate speedup
-      double speedup = cpu_time / gpu_time;
+      const double speedup = cpu_time / gpu_time;
 
       // Print results
       std::cout << std::setw(5) << size << "x" << std::setw(4) << size
@@ -70,11 +73,11 @@ void run_benchmarks() {
                 << std::setprecision(2) << gpu_time << std::setw(15)
                 << std::fixed << std::setprecision(2) << speedup << "\n";
     } catch (const std::exception& e) {
-      std::cerr << "Error with grid size " << size << ": " << e.what()
-                << "\n";
+      std::cerr << "Error with grid size " << size << ": " << e.what() << "\n";
     }
   }
 }
+}  // namespace
 
 int main() {
   try {
