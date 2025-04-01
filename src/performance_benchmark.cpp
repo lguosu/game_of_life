@@ -29,15 +29,15 @@ void run_benchmarks() {
   const double initial_density = 0.3;
   const std::vector<int> grid_sizes = {32, 64, 128, 256, 512, 1024, 2048};
 
-  std::cout << "======= Performance Benchmark: CPU vs GPU =======" << std::endl;
+  std::cout << "======= Performance Benchmark: CPU vs GPU =======" << "\n";
   std::cout << "Running " << generations << " generations for each test"
-            << std::endl;
-  std::cout << std::endl;
+            << "\n";
+  std::cout << "\n";
 
   std::cout << std::setw(10) << "Grid Size" << std::setw(15) << "CPU (μs/gen)"
             << std::setw(15) << "GPU (μs/gen)" << std::setw(15) << "Speedup (×)"
-            << std::endl;
-  std::cout << std::string(55, '-') << std::endl;
+            << "\n";
+  std::cout << std::string(55, '-') << "\n";
 
   for (const auto& size : grid_sizes) {
     try {
@@ -68,10 +68,10 @@ void run_benchmarks() {
                 << std::setw(15) << std::fixed << std::setprecision(2)
                 << cpu_time << std::setw(15) << std::fixed
                 << std::setprecision(2) << gpu_time << std::setw(15)
-                << std::fixed << std::setprecision(2) << speedup << std::endl;
+                << std::fixed << std::setprecision(2) << speedup << "\n";
     } catch (const std::exception& e) {
       std::cerr << "Error with grid size " << size << ": " << e.what()
-                << std::endl;
+                << "\n";
     }
   }
 }
@@ -80,7 +80,7 @@ int main() {
   try {
     run_benchmarks();
   } catch (const std::exception& e) {
-    std::cerr << "Error: " << e.what() << std::endl;
+    std::cerr << "Error: " << e.what() << "\n";
     return 1;
   }
 

@@ -40,7 +40,8 @@ int main(int argc, char* argv[]) {
     game.CopyToDevice();
 
     ClearScreen();
-    std::cout << "GPU Game of Life - Generation: 0" << std::endl;
+    std::cout << "GPU Game of Life - Generation: 0"
+              << "\n";
     game.Print();
 
     // Run the simulation for the specified number of generations
@@ -54,13 +55,13 @@ int main(int argc, char* argv[]) {
                           end_time - start_time)
                           .count();
       ClearScreen();
-      std::cout << "GPU Game of Life - Generation: " << gen << std::endl;
+      std::cout << "GPU Game of Life - Generation: " << gen << "\n";
       game.Print();
       std::cout << "Generation time: " << duration << " microseconds"
-                << std::endl;
+                << "\n";
     }
   } catch (const std::exception& e) {
-    std::cerr << "Error: " << e.what() << std::endl;
+    std::cerr << "Error: " << e.what() << "\n";
     return 1;
   }
 

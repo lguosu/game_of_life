@@ -37,7 +37,8 @@ int main(int argc, char* argv[]) {
   // Initialize with random state
   game.Randomize(initial_density);
   ClearScreen();
-  std::cout << "CPU Game of Life - Generation: 0" << std::endl;
+  std::cout << "CPU Game of Life - Generation: 0"
+            << "\n";
   game.Print();
 
   // Run the simulation for the specified number of generations
@@ -51,10 +52,10 @@ int main(int argc, char* argv[]) {
                         end_time - start_time)
                         .count();
     ClearScreen();
-    std::cout << "CPU Game of Life - Generation: " << gen << std::endl;
+    std::cout << "CPU Game of Life - Generation: " << gen << "\n";
     game.Print();
     std::cout << "Generation time: " << duration << " microseconds"
-              << std::endl;
+              << "\n";
   }
 
   return 0;
