@@ -2,13 +2,15 @@
 
 #include <gtest/gtest.h>
 
+#include <cstddef>
+
 // Test basic grid initialization
 TEST(CPUGameOfLifeTest, Initialization) {
   CPUGameOfLife game(10, 10);
 
   // Check that the grid is initially empty
-  for (int y = 0; y < game.height(); ++y) {
-    for (int x = 0; x < game.width(); ++x) {
+  for (size_t y = 0; y < game.height(); ++y) {
+    for (size_t x = 0; x < game.width(); ++x) {
       EXPECT_FALSE(game.GetCellState(x, y));
     }
   }

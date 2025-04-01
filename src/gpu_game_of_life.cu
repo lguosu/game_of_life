@@ -4,6 +4,8 @@
 #include <random>
 #include <stdexcept>
 
+#include <cuda_runtime.h>
+
 // CUDA kernel to compute the next generation
 __global__ void gameOfLifeKernel(const unsigned char* current_grid,
                                  unsigned char* next_grid, int width,
@@ -50,7 +52,7 @@ __global__ void gameOfLifeKernel(const unsigned char* current_grid,
 }
 
 // Constructor
-GPUGameOfLife::GPUGameOfLife(int width, int height)
+GPUGameOfLife::GPUGameOfLife(size_t width, size_t height)
     : GameOfLife(width, height) {
   // Calculate appropriate CUDA block and grid dimensions
   // Block dimensions - aim for 16x16 threads per block (common for 2D problems)

@@ -1,5 +1,6 @@
 #include <chrono>
 #include <cstdlib>
+#include <exception>
 #include <iostream>
 #include <thread>
 
