@@ -60,10 +60,16 @@ class GameOfLife {
   // Get the height of the grid
   [[nodiscard]] size_t height() const { return height_; }
 
-  // Get a copy of the current grid
-  [[nodiscard]] virtual std::vector<bool> grid() const { return grid_; }
-
  protected:
+  // Get a modifiable reference to the current grid.
+  [[nodiscard]] virtual std::vector<bool>& grid() { return grid_; }
+
+  /// Set the internal grid by moving the provided vector into the member
+  /// variable.
+  /// @param grid The grid to be moved into the member variable.
+  virtual void set_grid(std::vector<bool>&& grid) { grid_ = std::move(grid); }
+
+ private:
   size_t width_;
   size_t height_;
   std::vector<bool> grid_;  // The grid for storing cell states

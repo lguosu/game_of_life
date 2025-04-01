@@ -19,6 +19,6 @@ class CPUGameOfLife : public GameOfLife {
 
   // Helper method to get index from x, y coordinates
   [[nodiscard]] size_t GetIndex(size_t x, size_t y) const {
-    return (y * width_) + x;
+    return (y * width()) + x;
   }
 };

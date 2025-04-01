@@ -10,10 +10,10 @@ CPUGameOfLife::CPUGameOfLife(size_t width, size_t height)
     : GameOfLife(width, height) {}
 
 void CPUGameOfLife::NextGeneration() {
-  std::vector<bool> new_grid(width_ * height_);
+  std::vector<bool> new_grid(width() * height());
 
-  for (size_t y = 0; y < height_; ++y) {
-    for (size_t x = 0; x < width_; ++x) {
+  for (size_t y = 0; y < height(); ++y) {
+    for (size_t x = 0; x < width(); ++x) {
       const size_t live_neighbors = CountLiveNeighbors(x, y);
       const bool current_state = GetCellState(x, y);
 
@@ -32,7 +32,7 @@ void CPUGameOfLife::NextGeneration() {
     }
   }
 
-  grid_ = std::move(new_grid);
+  set_grid(std::move(new_grid));
 }
 
 size_t CPUGameOfLife::CountLiveNeighbors(size_t x, size_t y) const {
@@ -47,8 +47,8 @@ size_t CPUGameOfLife::CountLiveNeighbors(size_t x, size_t y) const {
       }
 
       // Wrap around the edges (toroidal grid)
-      const size_t nx = (x + dx + width_) % width_;
-      const size_t ny = (y + dy + height_) % height_;
+      const size_t nx = (x + dx + width()) % width();
+      const size_t ny = (y + dy + height()) % height();
 
       if (GetCellState(nx, ny)) {
         count++;
