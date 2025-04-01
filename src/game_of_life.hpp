@@ -50,7 +50,7 @@ class GameOfLife {
       for (int x = 0; x < width_; ++x) {
         std::cout << (GetCellState(x, y) ? alive_char : dead_char);
       }
-      std::cout << std::endl;
+      std::cout << "\n";
     }
   }
 
