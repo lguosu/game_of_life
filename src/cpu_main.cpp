@@ -8,10 +8,10 @@
 
 int main(int argc, char* argv[]) {
   // Default values
-  int width = 40;
-  int height = 20;
+  int width = 120;
+  int height = 40;
   int generations = 100;
-  double initial_density = 0.3;
+  double initial_density = 0.1;
   int delay = 100;  // milliseconds
 
   // Parse command line arguments if provided

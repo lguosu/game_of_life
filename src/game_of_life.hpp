@@ -16,7 +16,7 @@ class GameOfLife {
 
   // Initialize with random state (alive cells with the given probability)
   // Optional seed parameter for reproducible randomization
-  void Randomize(double alive_probability = 0.3, unsigned seed = 0) {
+  void Randomize(double alive_probability = 0.1, unsigned seed = 0) {
     std::random_device rd;
     std::mt19937 gen(seed != 0 ? seed : rd());
     std::uniform_real_distribution<> dis(0.0, 1.0);
